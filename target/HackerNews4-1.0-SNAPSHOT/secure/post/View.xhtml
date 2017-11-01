@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="PostViewDlg" widgetVar="PostViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewPostTitle}">
+            <h:form id="PostViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{postController.selected != null}">
+                        <h:outputText value="#{bundle.ViewPostLabel_postId}"/>
+                        <h:outputText value="#{postController.selected.postId}" title="#{bundle.ViewPostTitle_postId}"/>
+                        <h:outputText value="#{bundle.ViewPostLabel_postTitle}"/>
+                        <h:outputText value="#{postController.selected.postTitle}" title="#{bundle.ViewPostTitle_postTitle}"/>
+                        <h:outputText value="#{bundle.ViewPostLabel_postUrl}"/>
+                        <h:outputText value="#{postController.selected.postUrl}" title="#{bundle.ViewPostTitle_postUrl}"/>
+                        <h:outputText value="#{bundle.ViewPostLabel_score}"/>
+                        <h:outputText value="#{postController.selected.score}" title="#{bundle.ViewPostTitle_score}"/>
+                        <h:outputText value="#{bundle.ViewPostLabel_postText}"/>
+                        <h:outputText value="#{postController.selected.postText}" title="#{bundle.ViewPostTitle_postText}"/>
+                        <h:outputText value="#{bundle.ViewPostLabel_postType}"/>
+                        <h:outputText value="#{postController.selected.postType}" title="#{bundle.ViewPostTitle_postType}"/>
+                        <h:outputText value="#{bundle.ViewPostLabel_createdDate}"/>
+                        <h:outputText value="#{postController.selected.createdDate}" title="#{bundle.ViewPostTitle_createdDate}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewPostLabel_contributorId}"/>
+                        <h:outputText value="#{postController.selected.contributorId}" title="#{bundle.ViewPostTitle_contributorId}"/>
+                        <h:outputText value="#{bundle.ViewPostLabel_parentId}"/>
+                        <h:outputText value="#{postController.selected.parentId}" title="#{bundle.ViewPostTitle_parentId}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="PostViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

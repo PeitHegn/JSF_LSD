@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ContributorCreateDlg" widgetVar="ContributorCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateContributorTitle}">
+            <h:form id="ContributorCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{contributorController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateContributorLabel_contributorId}" for="contributorId" />
+                        <p:inputText id="contributorId" value="#{contributorController.selected.contributorId}" title="#{bundle.CreateContributorTitle_contributorId}" required="true" requiredMessage="#{bundle.CreateContributorRequiredMessage_contributorId}"/>
+                        <p:outputLabel value="#{bundle.CreateContributorLabel_contributorName}" for="contributorName" />
+                        <p:inputText id="contributorName" value="#{contributorController.selected.contributorName}" title="#{bundle.CreateContributorTitle_contributorName}" required="true" requiredMessage="#{bundle.CreateContributorRequiredMessage_contributorName}"/>
+                        <p:outputLabel value="#{bundle.CreateContributorLabel_contributorPassword}" for="contributorPassword" />
+                        <p:inputText id="contributorPassword" value="#{contributorController.selected.contributorPassword}" title="#{bundle.CreateContributorTitle_contributorPassword}" required="true" requiredMessage="#{bundle.CreateContributorRequiredMessage_contributorPassword}"/>
+                        <p:outputLabel value="#{bundle.CreateContributorLabel_contributorEmail}" for="contributorEmail" />
+                        <p:inputText id="contributorEmail" value="#{contributorController.selected.contributorEmail}" title="#{bundle.CreateContributorTitle_contributorEmail}" />
+                        <p:outputLabel value="#{bundle.CreateContributorLabel_score}" for="score" />
+                        <p:inputText id="score" value="#{contributorController.selected.score}" title="#{bundle.CreateContributorTitle_score}" />
+                        <p:outputLabel value="#{bundle.CreateContributorLabel_createdDate}" for="createdDate" />
+                        <p:calendar id="createdDate" pattern="MM/dd/yyyy" value="#{contributorController.selected.createdDate}" title="#{bundle.EditContributorTitle_createdDate}" required="true" requiredMessage="#{bundle.EditContributorRequiredMessage_createdDate}" showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{contributorController.create}" value="#{bundle.Save}" update="display,:ContributorListForm:datalist,:growl" oncomplete="handleSubmit(args,'ContributorCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="ContributorCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

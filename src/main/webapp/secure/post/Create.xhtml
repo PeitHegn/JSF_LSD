@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="PostCreateDlg" widgetVar="PostCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreatePostTitle}">
+            <h:form id="PostCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{postController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreatePostLabel_postId}" for="postId" />
+                        <p:inputText id="postId" value="#{postController.selected.postId}" title="#{bundle.CreatePostTitle_postId}" required="true" requiredMessage="#{bundle.CreatePostRequiredMessage_postId}"/>
+                        <p:outputLabel value="#{bundle.CreatePostLabel_postTitle}" for="postTitle" />
+                        <p:inputText id="postTitle" value="#{postController.selected.postTitle}" title="#{bundle.CreatePostTitle_postTitle}" />
+                        <p:outputLabel value="#{bundle.CreatePostLabel_postUrl}" for="postUrl" />
+                        <p:inputText id="postUrl" value="#{postController.selected.postUrl}" title="#{bundle.CreatePostTitle_postUrl}" />
+                        <p:outputLabel value="#{bundle.CreatePostLabel_score}" for="score" />
+                        <p:inputText id="score" value="#{postController.selected.score}" title="#{bundle.CreatePostTitle_score}" />
+                        <p:outputLabel value="#{bundle.CreatePostLabel_postText}" for="postText" />
+                        <p:inputText id="postText" value="#{postController.selected.postText}" title="#{bundle.CreatePostTitle_postText}" />
+                        <p:outputLabel value="#{bundle.CreatePostLabel_postType}" for="postType" />
+                        <p:inputText id="postType" value="#{postController.selected.postType}" title="#{bundle.CreatePostTitle_postType}" />
+                        <p:outputLabel value="#{bundle.CreatePostLabel_createdDate}" for="createdDate" />
+                        <p:calendar id="createdDate" pattern="MM/dd/yyyy" value="#{postController.selected.createdDate}" title="#{bundle.EditPostTitle_createdDate}" required="true" requiredMessage="#{bundle.EditPostRequiredMessage_createdDate}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreatePostLabel_contributorId}" for="contributorId" />
+                        <p:selectOneMenu id="contributorId" value="#{postController.selected.contributorId}" required="true" requiredMessage="#{bundle.EditPostRequiredMessage_contributorId}">
+                            <f:selectItems value="#{contributorController.itemsAvailableSelectOne}"
+                                           var="contributorIdItem"
+                                           itemValue="#{contributorIdItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreatePostLabel_parentId}" for="parentId" />
+                        <p:selectOneMenu id="parentId" value="#{postController.selected.parentId}" >
+                            <f:selectItems value="#{postController.itemsAvailableSelectOne}"
+                                           var="parentIdItem"
+                                           itemValue="#{parentIdItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{postController.create}" value="#{bundle.Save}" update="display,:PostListForm:datalist,:growl" oncomplete="handleSubmit(args,'PostCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="PostCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

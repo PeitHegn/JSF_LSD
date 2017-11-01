@@ -1,0 +1,17 @@
+dk\am\hackernews4\view\util\JsfUtil.class
+dk\am\hackernews4\model\Contributor.class
+dk\am\hackernews4\resources\RESTConfig.class
+dk\am\hackernews4\view\PostController$PostControllerConverter.class
+dk\am\hackernews4\model\RolfHelgePost.class
+dk\am\hackernews4\view\PostController.class
+dk\am\hackernews4\model\Contributor_.class
+dk\am\hackernews4\resources\PostResource.class
+dk\am\hackernews4\authentication\AuthenticationBean.class
+dk\am\hackernews4\facade\AbstractFacade.class
+dk\am\hackernews4\facade\ContributorFacade.class
+dk\am\hackernews4\model\Post_.class
+dk\am\hackernews4\view\util\JsfUtil$PersistAction.class
+dk\am\hackernews4\facade\PostFacade.class
+dk\am\hackernews4\view\ContributorController.class
+dk\am\hackernews4\view\ContributorController$ContributorControllerConverter.class
+dk\am\hackernews4\model\Post.class

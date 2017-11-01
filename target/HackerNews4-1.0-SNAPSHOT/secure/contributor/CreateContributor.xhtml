@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ContributorCreateDlg" widgetVar="ContributorCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateContributorTitle}">
+            <h:form id="ContributorForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{contributorController.selected != null}">
+                        <p:outputLabel value="Username" for="contributorName" />
+                        <p:inputText id="contributorName" value="#{contributorController.selected.contributorName}" title="#{bundle.CreateContributorTitle_contributorName}" required="true" requiredMessage="#{bundle.CreateContributorRequiredMessage_contributorName}"/>
+                        
+                        <p:outputLabel value="Password" for="userPassword1" />
+                        <p:password id="userPassword1" value="#{contributorController.selected.contributorPassword}" match="userPassword2" feedback="true" inline="true" title="#{bundle.CreateContributorTitle_contributorPassword}" required="true" requiredMessage="#{bundle.CreateContributorRequiredMessage_contributorPassword}"/>
+
+                        <p:outputLabel value="Repeat Password" for="userPassword2" />
+                        <p:password id="userPassword2" value="#{contributorController.selected.contributorPassword}" title="#{bundle.CreateContributorTitle_contributorPassword}" required="true" requiredMessage="#{bundle.CreateContributorRequiredMessage_contributorPassword}"/>
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{contributorController.create}" value="#{bundle.Save}" update=":growl" oncomplete="handleSubmit(args,'ContributorCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="ContributorCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>
