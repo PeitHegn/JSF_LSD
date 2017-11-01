@@ -46,12 +46,6 @@ public class PostResource {
     return String.valueOf(postFacade.findHighestHanesstId());
     }
     
-//    @POST
-//    @Path("/post")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public String testPost(){
-//        return "POST Works";
-//    }
     
     @POST
     @Path("/post")
