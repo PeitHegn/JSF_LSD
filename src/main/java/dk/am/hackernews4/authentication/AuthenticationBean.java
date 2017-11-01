@@ -52,7 +52,7 @@ public class AuthenticationBean implements Serializable {
         JsfUtil.addSuccessMessage(msg);
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("loggedInContributor", loggedInContributor);
         RequestContext.getCurrentInstance().update("storyListForm");
-        return "index.xhtml";
+        return "index.xhtml?faces-redirect=true";
     }
 
     public Contributor getLoggedInContributor() {

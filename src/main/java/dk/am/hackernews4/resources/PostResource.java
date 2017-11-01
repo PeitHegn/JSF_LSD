@@ -10,11 +10,9 @@ import dk.am.hackernews4.facade.PostFacade;
 import dk.am.hackernews4.model.Contributor;
 import dk.am.hackernews4.model.Post;
 import dk.am.hackernews4.model.RolfHelgePost;
-import java.awt.BorderLayout;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
-import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -38,6 +36,13 @@ public class PostResource {
     private PostFacade postFacade;
     @Inject
     private ContributorFacade contributorFacade;
+    
+    @GET
+    @Path("/status")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String status(){
+        return "Alive";
+    }
     
     @GET
     @Path("/latest")
