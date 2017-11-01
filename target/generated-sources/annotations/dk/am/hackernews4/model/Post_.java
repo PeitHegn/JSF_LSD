@@ -10,7 +10,7 @@ import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2017-11-01T12:25:40")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2017-11-01T15:39:41")
 @StaticMetamodel(Post.class)
 public class Post_ { 
 
@@ -24,5 +24,6 @@ public class Post_ {
     public static volatile SingularAttribute<Post, String> postTitle;
     public static volatile SingularAttribute<Post, BigDecimal> postId;
     public static volatile SingularAttribute<Post, Post> parentId;
+    public static volatile SingularAttribute<Post, BigInteger> hanesstId;
 
 }

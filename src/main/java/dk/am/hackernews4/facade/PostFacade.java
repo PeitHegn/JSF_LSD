@@ -7,6 +7,7 @@ package dk.am.hackernews4.facade;
 
 import dk.am.hackernews4.model.Post;
 import dk.am.hackernews4.model.RolfHelgePost;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -30,17 +31,28 @@ public class PostFacade extends AbstractFacade<Post> {
     public PostFacade() {
         super(Post.class);
     }
-    
-    public List<Post> findAllStories(){
+
+    public List<Post> findAllStories() {
         return em.createNamedQuery("Post.findByPostType").setParameter("postType", "story").getResultList();
     }
-    
-    public List<Post> findAllComments(){
+
+    public List<Post> findAllComments() {
         return em.createNamedQuery("Post.findByPostType").setParameter("postType", "comment").getResultList();
     }
-    
-    public List<RolfHelgePost> findAllRolfHelgePosts(){
+
+    public List<RolfHelgePost> findAllRolfHelgePosts() {
+
         return em.createNamedQuery("Post.findRolfHelgePost", RolfHelgePost.class).getResultList();
     }
-    
+
+    public Integer findHighestHanesstId() {
+        Integer hanesstId = null;
+        try {
+             hanesstId = ((BigDecimal) em.createNamedQuery("Post.findHighestHanessId").setMaxResults(1).getSingleResult()).intValue();
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+        return hanesstId;
+    }
+
 }

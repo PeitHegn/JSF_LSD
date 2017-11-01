@@ -45,6 +45,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Post.findByScore", query = "SELECT p FROM Post p WHERE p.score = :score"),
     @NamedQuery(name = "Post.findByPostText", query = "SELECT p FROM Post p WHERE p.postText = :postText"),
     @NamedQuery(name = "Post.findByPostType", query = "SELECT p FROM Post p WHERE p.postType = :postType"),
+    @NamedQuery(name = "Post.findHighestHanessId", query = "SELECT p.hanesstId FROM Post p ORDER BY p.hanesstId desc"),
     @NamedQuery(name = "Post.findRolfHelgePost", query = "SELECT NEW dk.am.hackernews4.model.RolfHelgePost(c.contributorName, p.postType, c.contributorPassword, p.postTitle, p.postUrl, p.parentId, p.postText) from Post p join p.contributorId c "),
     @NamedQuery(name = "Post.findByCreatedDate", query = "SELECT p FROM Post p WHERE p.createdDate = :createdDate")})
 public class Post implements Serializable {
@@ -69,6 +70,9 @@ public class Post implements Serializable {
 
     @Column(name = "score")
     private BigInteger score;
+    
+    @Column(name = "hanesst_id")
+    private BigInteger hanesstId;
 
     @Size(max = 1024)
     @Column(name = "post_text")
@@ -139,6 +143,14 @@ public class Post implements Serializable {
         this.score = score;
     }
 
+    public BigInteger getHanesstId() {
+        return hanesstId;
+    }
+
+    public void setHanesstId(BigInteger hanesstId) {
+        this.hanesstId = hanesstId;
+    }
+    
     public String getPostText() {
         return postText;
     }

@@ -10,7 +10,9 @@ import dk.am.hackernews4.model.RolfHelgePost;
 import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -19,7 +21,8 @@ import javax.ws.rs.core.MediaType;
  *
  * @author Doctor
  */
-@Path("/post")
+
+@Path("/")
 @RequestScoped
 public class PostResource {
     
@@ -28,13 +31,17 @@ public class PostResource {
     private PostFacade postFacade;
     
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<RolfHelgePost> findAllRolfHelgePosts(){
-        return postFacade.findAllRolfHelgePosts();
-    } 
+    @Path("/latest")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String findAllRolfHelgePosts(){
+//        return postFacade.findAllRolfHelgePosts();
+    return String.valueOf(postFacade.findHighestHanesstId());
+    }
     
-    public void savePost(RolfHelgePost rhp){
+    @POST
+    @Path("/post")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void digestPost(RolfHelgePost rolfHelgePost){
         
-
     }
 }

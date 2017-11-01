@@ -20,9 +20,10 @@ public class RolfHelgePost {
     private String post_title;
     private String post_url;
     private Integer post_parent;
+    private Integer hanesst_id;
     private String post_text;
 
-    public RolfHelgePost(String username, String post_type, String pwd_hash, String post_title, String post_url, Post post_parent, String post_text) {
+    public RolfHelgePost(String username, String post_type, String pwd_hash, String post_title, String post_url, Post post_parent, Integer hanesst_id, String post_text) {
         this.username = username;
         this.post_type = post_type;
         this.pwd_hash = pwd_hash;
@@ -31,8 +32,10 @@ public class RolfHelgePost {
         if(null!=post_parent){
         this.post_parent = post_parent.getPostId().intValue();
         }
-        else
+        else{
             this.post_parent = null;
+        }
+        this.hanesst_id = hanesst_id;
         this.post_text = post_text;
     }
 
@@ -82,6 +85,14 @@ public class RolfHelgePost {
 
     public void setPost_parent(Integer post_parent) {
         this.post_parent = post_parent;
+    }
+
+    public Integer getHanesst_id() {
+        return hanesst_id;
+    }
+
+    public void setHanesst_id(Integer hanesst_id) {
+        this.hanesst_id = hanesst_id;
     }
 
     public String getPost_text() {
