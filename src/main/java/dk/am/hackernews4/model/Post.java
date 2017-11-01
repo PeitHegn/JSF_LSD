@@ -11,6 +11,7 @@ import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -92,7 +93,7 @@ public class Post implements Serializable {
     @ManyToOne(optional = false)
     private Contributor contributorId;
 
-    @OneToMany(mappedBy = "parentId")
+    @OneToMany(mappedBy = "parentId"/*, cascade = CascadeType.ALL*/)
     private List<Post> postList;
 
     @JoinColumn(name = "parent_id", referencedColumnName = "post_id")

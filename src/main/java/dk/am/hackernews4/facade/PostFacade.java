@@ -54,5 +54,16 @@ public class PostFacade extends AbstractFacade<Post> {
         }
         return hanesstId;
     }
+    
+    public Post findFromPostId(BigDecimal postId){
+        Post post = null;
+        try{
+            post = em.createNamedQuery("Post.findByPostId", Post.class).setParameter("postId", postId).getSingleResult();
+        }
+        catch(Exception ex){
+            System.out.println("findFromPostId went wrong. "+ex.getMessage());
+        }
+        return post;
+    }
 
 }

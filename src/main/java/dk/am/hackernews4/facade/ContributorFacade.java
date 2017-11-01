@@ -6,6 +6,7 @@
 package dk.am.hackernews4.facade;
 
 import dk.am.hackernews4.model.Contributor;
+import java.math.BigDecimal;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -35,7 +36,20 @@ public class ContributorFacade extends AbstractFacade<Contributor> {
         try {
             contributor =  em.createNamedQuery("Contributor.findByContributorNameAndPassword", Contributor.class).setParameter("contributorName", username).setParameter("contributorPassword", password).getSingleResult();
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+            System.out.println("Error in findContributorForLogin" + ex.getMessage());
+        }
+        return contributor;
+    }
+    
+    public Contributor findContributorFromId(BigDecimal id){
+        
+        Contributor contributor = null;
+        
+        try{
+           contributor = em.createNamedQuery("Contributor.findByContributorId", Contributor.class).setParameter("contributorId", id).getSingleResult();
+        }
+        catch(Exception ex){
+            System.out.println("findContributorFromId failed: "+ex.getMessage());
         }
         return contributor;
     }

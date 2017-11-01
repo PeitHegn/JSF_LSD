@@ -23,6 +23,12 @@ public class RolfHelgePost {
     private Integer hanesst_id;
     private String post_text;
 
+    
+    public RolfHelgePost(){
+        
+    }
+    
+    
     public RolfHelgePost(String username, String post_type, String pwd_hash, String post_title, String post_url, Post post_parent, Integer hanesst_id, String post_text) {
         this.username = username;
         this.post_type = post_type;

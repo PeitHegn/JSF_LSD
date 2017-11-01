@@ -21,7 +21,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.faces.event.ActionEvent;
-import javax.faces.view.ViewScoped;
 import org.primefaces.context.RequestContext;
 
 @Named("contributorController")
@@ -29,7 +28,7 @@ import org.primefaces.context.RequestContext;
 public class ContributorController implements Serializable {
 
     @EJB
-    private dk.am.hackernews4.facade.ContributorFacade ejbFacade;
+    private ContributorFacade ejbFacade;
     private List<Contributor> items = null;
     private Contributor selected;
 
@@ -55,15 +54,12 @@ public class ContributorController implements Serializable {
     }
 
     public Contributor prepareCreate(ActionEvent event) {
-        System.out.println("RAMT!!");
         selected = new Contributor();
         initializeEmbeddableKey();
-//        RequestContext.getCurrentInstance().update("ContributorForm");
         return selected;
     }
 
     public void prepareNewContributor() {
-        System.out.println("RAMT!!");
         selected = new Contributor();
         RequestContext.getCurrentInstance().update("ContributorForm:display:grid");
         initializeEmbeddableKey();
