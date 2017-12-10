@@ -22,7 +22,7 @@
                         <p:menuitem value="Stories" outcome="/index" icon="ui-icon-home"/>
                         <p:menuitem value="Comments" outcome="/comments" icon="ui-icon-comment"/>
                         <p:menuitem value="Login" outcome="/login" rendered="#{authenticationBean.loggedInContributor==null}" style="position: absolute; right: 6px;"/>
-                        <p:menuitem value="Logout" rendered="#{authenticationBean.loggedInContributor!=null}" action="#{authenticationBean.doLogout()}" update="menuForm,:growl" style="position: absolute; right: 6px;"/>
+                        <p:menuitem value="Logout" rendered="#{authenticationBean.loggedInContributor!=null}" action="#{authenticationBean.doLogout()}" update=":growl" style="position: absolute; right: 6px;"/>
                     </p:menubar>
                     
                 </h:form>

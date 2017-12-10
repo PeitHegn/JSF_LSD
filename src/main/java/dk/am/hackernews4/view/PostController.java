@@ -5,6 +5,7 @@ import dk.am.hackernews4.view.util.JsfUtil;
 import dk.am.hackernews4.view.util.JsfUtil.PersistAction;
 import dk.am.hackernews4.facade.PostFacade;
 import dk.am.hackernews4.model.Contributor;
+import io.prometheus.client.Histogram;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -30,7 +31,17 @@ public class PostController implements Serializable {
     private List<Post> items = null;
     private List<Post> stories = null;
     private List<Post> comments = null;
-    
+
+    private static final Histogram REQUEST_LATENCY_COMMENT = Histogram.build()
+            .name("create_comment_latency")
+            .help("Request for creating a comment latency in seconds.")
+            .register();
+
+    private static final Histogram REQUEST_LATENCY_STORY = Histogram.build()
+            .name("create_story_latency")
+            .help("Request for creating a story latency in seconds.")
+            .register();
+
     private Post selected;
 
     public PostController() {
@@ -66,21 +77,31 @@ public class PostController implements Serializable {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
-    
-    public void createComment(){
+
+    public void createComment() {
+        Histogram.Timer requestTimer = REQUEST_LATENCY_COMMENT.startTimer();
         selected.setCreatedDate(new Date());
         selected.setPostType("comment");
-        selected.setContributorId((Contributor)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("loggedInContributor"));
+        selected.setContributorId((Contributor) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("loggedInContributor"));
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PostCreated"));
+        requestTimer.observeDuration();
     }
-    
-    public void createStory(){
-        
+
+    public void createStory() {
+        Logger.getLogger(PostController.class.getName()).log(Level.INFO, null, "starting create story method");
+        Histogram.Timer requestTimer = REQUEST_LATENCY_STORY.startTimer();
+        try {
+            Thread.sleep(15000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(PostController.class.getName()).log(Level.SEVERE, null, "Failed to sleep for 15 seconds: " + ex);
+        }
+
         selected.setCreatedDate(new Date());
-        selected.setContributorId((Contributor)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("loggedInContributor"));
+        selected.setContributorId((Contributor) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("loggedInContributor"));
         selected.setPostType("story");
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PostCreated"));
-        
+        requestTimer.observeDuration();
+        Logger.getLogger(PostController.class.getName()).log(Level.INFO, null, "finishing create story method");
     }
 
     public void update() {
@@ -101,7 +122,6 @@ public class PostController implements Serializable {
         }
         return items;
     }
-    
 
     private void persist(PersistAction persistAction, String successMessage) {
         if (selected != null) {
@@ -145,7 +165,6 @@ public class PostController implements Serializable {
     public List<Post> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
-    
 
     public List<Post> getStories() {
         stories = getFacade().findAllStories();
@@ -164,7 +183,6 @@ public class PostController implements Serializable {
     public void setComments(List<Post> comments) {
         this.comments = comments;
     }
-    
 
     @FacesConverter(forClass = Post.class)
     public static class PostControllerConverter implements Converter {

@@ -8,7 +8,10 @@ package dk.am.hackernews4.facade;
 import dk.am.hackernews4.model.Post;
 import dk.am.hackernews4.model.RolfHelgePost;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -42,26 +45,32 @@ public class PostFacade extends AbstractFacade<Post> {
 
     public List<RolfHelgePost> findAllRolfHelgePosts() {
 
-        return em.createNamedQuery("Post.findRolfHelgePost", RolfHelgePost.class).getResultList();
+        List<RolfHelgePost> rolfHelgePosts = null;
+        try {
+            rolfHelgePosts = em.createNamedQuery("Post.findRolfHelgePost", RolfHelgePost.class).getResultList();
+        } catch (Exception ex) {
+            Logger.getLogger(PostFacade.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rolfHelgePosts;
     }
 
     public Integer findHighestHanesstId() {
         Integer hanesstId = null;
         try {
-             hanesstId = ((BigDecimal) em.createNamedQuery("Post.findHighestHanessId").setMaxResults(1).getSingleResult()).intValue();
+            BigInteger bi = (BigInteger)em.createNamedQuery("Post.findHighestHanessId").getSingleResult();
+            hanesstId = bi.intValue();
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+            Logger.getLogger(PostFacade.class.getName()).log(Level.SEVERE, null, ex);
         }
         return hanesstId;
     }
-    
-    public Post findFromPostId(BigDecimal postId){
+
+    public Post findFromPostId(BigDecimal postId) {
         Post post = null;
-        try{
+        try {
             post = em.createNamedQuery("Post.findByPostId", Post.class).setParameter("postId", postId).getSingleResult();
-        }
-        catch(Exception ex){
-            System.out.println("findFromPostId went wrong. "+ex.getMessage());
+        } catch (Exception ex) {
+            Logger.getLogger(PostFacade.class.getName()).log(Level.SEVERE, null, ex);
         }
         return post;
     }

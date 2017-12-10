@@ -10,6 +10,7 @@ dk\am\hackernews4\authentication\AuthenticationBean.class
 dk\am\hackernews4\facade\AbstractFacade.class
 dk\am\hackernews4\facade\ContributorFacade.class
 dk\am\hackernews4\model\Post_.class
+dk\am\hackernews4\resources\PostResource$1.class
 dk\am\hackernews4\view\util\JsfUtil$PersistAction.class
 dk\am\hackernews4\facade\PostFacade.class
 dk\am\hackernews4\view\ContributorController.class

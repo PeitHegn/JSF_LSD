@@ -21,6 +21,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.faces.event.ActionEvent;
+import javax.servlet.http.HttpServletRequest;
 import org.primefaces.context.RequestContext;
 
 @Named("contributorController")
@@ -72,6 +73,12 @@ public class ContributorController implements Serializable {
     }
 
     public String create() {
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        String ipAddress = request.getHeader("X-FORWARDED-FOR");
+        if (ipAddress == null) {
+            ipAddress = request.getRemoteAddr();
+        }
+        Logger.getLogger(ContributorController.class.getName()).log(Level.INFO, null, "IP address of new user: "+ipAddress);
         selected.setCreatedDate(new Date());
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("ContributorCreated"));
         if (!JsfUtil.isValidationFailed()) {

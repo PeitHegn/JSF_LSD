@@ -52,6 +52,8 @@ public class AuthenticationBean implements Serializable {
         JsfUtil.addSuccessMessage(msg);
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("loggedInContributor", loggedInContributor);
         RequestContext.getCurrentInstance().update("storyListForm");
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
         return "index.xhtml?faces-redirect=true";
     }
 
