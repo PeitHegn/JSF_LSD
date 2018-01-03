@@ -8,4 +8,6 @@ COPY postgresql-9.1-901-1.jdbc4.jar /usr/local/glassfish4/glassfish/domains/doma
 COPY ./target/HackerNews4-1.0-SNAPSHOT.war /
 COPY start.sh /
 
+RUN chmod +x /start.sh
+
 CMD /bin/bash start.sh
