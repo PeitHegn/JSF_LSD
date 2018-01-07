@@ -8,17 +8,23 @@
 
     <ui:composition>
 
-        <p:dialog id="StoryCreateDlg" widgetVar="StoryCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreatePostTitle}">
+        <p:dialog id="StoryCreateDlg" 
+                  widgetVar="StoryCreateDialog" 
+                  modal="true" 
+                  width="600"
+                  height="150"
+                  resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{bundle.CreatePostTitle}">
             <h:form id="StoryCreateForm">
                 <h:panelGroup id="display">
-                    <p:panelGrid columns="2" rendered="#{postController.selected != null}">
+                    <p:panelGrid columns="2" rendered="#{postController.selected != null}" style="width: 100%;">
                         <p:outputLabel value="#{bundle.CreatePostLabel_postTitle}" for="postTitle" />
-                        <p:inputText id="postTitle" value="#{postController.selected.postTitle}" title="#{bundle.CreatePostTitle_postTitle}" />
+                        <p:inputText id="postTitle" value="#{postController.selected.postTitle}" title="#{bundle.CreatePostTitle_postTitle}" style="width: 100%;"/>
                         <p:outputLabel value="#{bundle.CreatePostLabel_postUrl}" for="postUrl" />
-                        <p:inputText id="postUrl" value="#{postController.selected.postUrl}" title="#{bundle.CreatePostTitle_postUrl}" />
+                        <p:inputText id="postUrl" value="#{postController.selected.postUrl}" title="#{bundle.CreatePostTitle_postUrl}" style="width: 100%;"/>
                     </p:panelGrid>
                     <p:commandButton actionListener="#{postController.createStory()}" value="#{bundle.Save}" update="display,:storyListForm:datalist,:growl" oncomplete="handleSubmit(args,'StoryCreateDialog');"/>
-                    <p:commandButton value="#{bundle.Cancel}" onclick="StoryCreateDialog.hide()"/>
                 </h:panelGroup>
             </h:form>
         </p:dialog>

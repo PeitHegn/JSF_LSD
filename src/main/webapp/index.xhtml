@@ -10,14 +10,21 @@
 
         <ui:define name="body">
             <h:form id="storyListForm">
-                <p:dataTable id="datalist" value="#{postController.stories}" var="item"
-                             selectionMode="single" selection="#{postController.selected}"
+                <p:dataTable id="datalist" 
+                             value="#{postController.stories}" 
+                             var="item"
+                             selectionMode="single" 
+                             selection="#{postController.selected}"
                              paginator="true"
                              rowKey="#{item.postId}"
                              rows="20"
                              rowsPerPageTemplate="10,20,30,40,50"
                              tableStyle="table-layout: auto;"
                              >
+                    
+                    <p:ajax event="rowSelect"   update="createButton viewButton" />
+                    <p:ajax event="rowUnselect" update="createButton viewButton" />
+                    
                     <p:column>
                         <f:facet name="header">
                             <h:outputText value="Story Title"/>
@@ -45,12 +52,16 @@
                         </h:outputText>
                     </p:column>
                     <f:facet name="footer" rendered="#{authenticationBean.loggedInContributor!=null}">
-                        <p:commandButton rendered="#{authenticationBean.loggedInContributor!=null}" id="createButton" icon="ui-icon-plus"   value="Add Story" actionListener="#{postController.prepareCreate}" update=":StoryCreateForm" oncomplete="PF('StoryCreateDialog').show()"/>
+                        <p:commandButton rendered="#{authenticationBean.loggedInContributor!=null}" id="createButton" icon="ui-icon-plus" value="Add Story" actionListener="#{postController.prepareCreate}" update=":StoryCreateForm" oncomplete="PF('StoryCreateDialog').show()"/>
+                        <p:commandButton id="viewButton" icon="ui-icon-search" value="#{bundle.View}" update=":StoryViewForm" oncomplete="PF('PostViewDialog').show()" disabled="#{empty postController.selected}" actionListener="#{postController.refreshParent()}"/>
                     </f:facet>
                 </p:dataTable>
             </h:form>
 
             <ui:include src="/secure/post/StoryCreate.xhtml"/>
+            <ui:include src="/StoryView.xhtml" />
+            <ui:include src="/secure/post/ReplyComment.xhtml"/>
+            <ui:include src="/secure/post/AddComment.xhtml"/>
 
         </ui:define>
     </ui:composition>

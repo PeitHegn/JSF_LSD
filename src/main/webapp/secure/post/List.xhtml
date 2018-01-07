@@ -16,8 +16,10 @@
         <ui:define name="body">
             <h:form id="PostListForm">
                 <p:panel header="#{bundle.ListPostTitle}">
-                    <p:dataTable id="datalist" value="#{postController.items}" var="item"
-                                 selectionMode="single" selection="#{postController.selected}"
+                    <p:dataTable id="datalist" 
+                                 value="#{postController.items}" var="item"
+                                 selectionMode="single" 
+                                 selection="#{postController.selected}"
                                  paginator="true"
                                  rowKey="#{item.postId}"
                                  rows="10"

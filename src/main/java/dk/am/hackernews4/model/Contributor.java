@@ -155,6 +155,7 @@ public class Contributor implements Serializable {
     public void setPostList(List<Post> postList) {
         this.postList = postList;
     }
+    
 
     @Override
     public int hashCode() {

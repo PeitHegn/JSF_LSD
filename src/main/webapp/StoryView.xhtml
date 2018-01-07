@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="PostViewDlg" 
+                  width="750" 
+                  height="500"  
+                  widgetVar="PostViewDialog" 
+                  modal="true" 
+                  resizable="false" 
+                  appendTo="@(body)" 
+                  header="#{bundle.ViewPostTitle}">
+            
+            <h:form id="StoryViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{postController.selected != null}" style="width: 100%">
+
+                        <h:outputText value="Title"/>
+                        <h:outputText value="#{postController.selected.postTitle}" title="#{bundle.ViewPostTitle_postTitle}"/>
+                        <h:outputText value="Url"/>
+                        <h:outputLink value="#{postController.selected.postUrl}">#{postController.selected.postUrl}</h:outputLink>
+                        <h:outputText value="Score"/>
+                        <h:outputText value="#{postController.selected.score}" title="#{bundle.ViewPostTitle_score}"/>
+                        <h:outputText value="Date added"/>
+                        <h:outputText value="#{postController.selected.createdDate}" title="#{bundle.ViewPostTitle_createdDate}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                    </p:panelGrid>
+
+                    <p:spacer height="10" width="100%"/>
+
+                    <p:treeTable
+                        rendered="#{postController.selected!=null}"
+                        id="tree"
+                        value="#{postController.treeNode}" 
+                        selectionMode="single"
+                        selection="#{postController.treeNodeParent}"
+                        var="comment" 
+                        style="margin-top:0" 
+                        scrollable="true"
+                        scrollHeight="300">
+
+                        <p:ajax event="select" update=":StoryViewForm:replyButton" />
+                        <p:ajax event="unselect" update=":StoryViewForm:replyButton" />
+
+                        <p:column headerText="Comment" style="width: 75%;">
+                            <h:outputText value="#{comment.postText}" />
+                        </p:column>
+                        <p:column headerText="Created By">
+                            <h:outputText value="#{comment.contributorId.contributorName}" />
+                        </p:column>
+                    </p:treeTable>
+                    
+                    <p:commandButton 
+                        id="replyButton" 
+                        icon="ui-icon-plus" 
+                        value="Reply" 
+                        disabled="#{empty postController.treeNodeParent}" 
+                        actionListener="#{postController.prepareReplyCreate()}"
+                        update=":ReplyCommentCreateForm" 
+                        oncomplete="PF('ReplyCommentCreateDialog').show()"
+                        rendered="#{authenticationBean.loggedInContributor!=null}"/>
+                    
+                    <p:commandButton 
+                        id="addButton"
+                        style="float: right;"
+                        icon="ui-icon-plus" 
+                        value="Add Comment" 
+                        actionListener="#{postController.prepareAddComment()}"
+                        update=":AddCommentCreateForm" 
+                        oncomplete="PF('AddCommentCreateDialog').show()"
+                        rendered="#{authenticationBean.loggedInContributor!=null}"/>
+
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

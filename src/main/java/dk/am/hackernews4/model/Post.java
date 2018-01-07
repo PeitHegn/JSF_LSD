@@ -26,10 +26,13 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.TreeNode;
 
 /**
  *
@@ -39,15 +42,24 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "post", catalog = "postgres", schema = "public")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Post.findAll", query = "SELECT p FROM Post p"),
-    @NamedQuery(name = "Post.findByPostId", query = "SELECT p FROM Post p WHERE p.postId = :postId"),
-    @NamedQuery(name = "Post.findByPostTitle", query = "SELECT p FROM Post p WHERE p.postTitle = :postTitle"),
-    @NamedQuery(name = "Post.findByPostUrl", query = "SELECT p FROM Post p WHERE p.postUrl = :postUrl"),
-    @NamedQuery(name = "Post.findByScore", query = "SELECT p FROM Post p WHERE p.score = :score"),
-    @NamedQuery(name = "Post.findByPostText", query = "SELECT p FROM Post p WHERE p.postText = :postText"),
-    @NamedQuery(name = "Post.findByPostType", query = "SELECT p FROM Post p WHERE p.postType = :postType"),
-    @NamedQuery(name = "Post.findHighestHanessId", query = "SELECT MAX(p.hanesstId) FROM Post p"),
-    @NamedQuery(name = "Post.findRolfHelgePost", query = "SELECT NEW dk.am.hackernews4.model.RolfHelgePost(c.contributorName, p.postType, c.contributorPassword, p.postTitle, p.postUrl, p.parentId, p.postText) from Post p join p.contributorId c "),
+    @NamedQuery(name = "Post.findAll", query = "SELECT p FROM Post p")
+    ,
+    @NamedQuery(name = "Post.findByPostId", query = "SELECT p FROM Post p WHERE p.postId = :postId")
+    ,
+    @NamedQuery(name = "Post.findByPostTitle", query = "SELECT p FROM Post p WHERE p.postTitle = :postTitle")
+    ,
+    @NamedQuery(name = "Post.findByPostUrl", query = "SELECT p FROM Post p WHERE p.postUrl = :postUrl")
+    ,
+    @NamedQuery(name = "Post.findByScore", query = "SELECT p FROM Post p WHERE p.score = :score")
+    ,
+    @NamedQuery(name = "Post.findByPostText", query = "SELECT p FROM Post p WHERE p.postText = :postText")
+    ,
+    @NamedQuery(name = "Post.findByPostType", query = "SELECT p FROM Post p WHERE p.postType = :postType")
+    ,
+    @NamedQuery(name = "Post.findHighestHanessId", query = "SELECT MAX(p.hanesstId) FROM Post p")
+    ,
+    @NamedQuery(name = "Post.findRolfHelgePost", query = "SELECT NEW dk.am.hackernews4.model.RolfHelgePost(c.contributorName, p.postType, c.contributorPassword, p.postTitle, p.postUrl, p.parentId, p.postText) from Post p join p.contributorId c ")
+    ,
     @NamedQuery(name = "Post.findByCreatedDate", query = "SELECT p FROM Post p WHERE p.createdDate = :createdDate")})
 public class Post implements Serializable {
 
@@ -71,7 +83,7 @@ public class Post implements Serializable {
 
     @Column(name = "score")
     private BigInteger score;
-    
+
     @Column(name = "hanesst_id")
     private BigInteger hanesstId;
 
@@ -93,7 +105,7 @@ public class Post implements Serializable {
     @ManyToOne(optional = false)
     private Contributor contributorId;
 
-    @OneToMany(mappedBy = "parentId"/*, cascade = CascadeType.ALL*/)
+    @OneToMany(mappedBy = "parentId", cascade = CascadeType.ALL)
     private List<Post> postList;
 
     @JoinColumn(name = "parent_id", referencedColumnName = "post_id")
@@ -151,7 +163,7 @@ public class Post implements Serializable {
     public void setHanesstId(BigInteger hanesstId) {
         this.hanesstId = hanesstId;
     }
-    
+
     public String getPostText() {
         return postText;
     }
@@ -200,6 +212,37 @@ public class Post implements Serializable {
     public void setParentId(Post parentId) {
         this.parentId = parentId;
     }
+
+//    @Transient
+//    public TreeNode getTree() {
+//
+//        TreeNode root = new DefaultTreeNode(null, null);
+//
+////        TreeNode child1 = new DefaultTreeNode(new Post(new BigDecimal(201), new Date()),root);
+////        TreeNode child2 = new DefaultTreeNode(new Post(new BigDecimal(202), new Date()),root);
+////        TreeNode child3 = new DefaultTreeNode(new Post(new BigDecimal(203), new Date()),root);
+////        TreeNode child31 = new DefaultTreeNode(new Post(new BigDecimal(203), new Date()),child3);
+////        TreeNode child32 = new DefaultTreeNode(new Post(new BigDecimal(203), new Date()),child3);
+//        if (postList != null) {
+//            for (Post post : postList) {
+//                TreeNode comments = new DefaultTreeNode(post, root);
+//                createSubNode(post, comments);
+//            }
+//        }
+//
+//        return root;
+//    }
+//
+//    @Transient
+//    public void createSubNode(Post parrent, TreeNode node) {
+//        List<Post> postList = parrent.getPostList();
+//        if (postList != null) {
+//            for (Post subPost : postList) {
+//                TreeNode subNode = new DefaultTreeNode(subPost, node);
+//                createSubNode(subPost, subNode);
+//            }
+//        }
+//    }
 
     @Override
     public int hashCode() {

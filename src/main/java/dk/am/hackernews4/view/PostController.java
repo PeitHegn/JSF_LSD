@@ -8,11 +8,13 @@ import dk.am.hackernews4.model.Contributor;
 import io.prometheus.client.Histogram;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.inject.Named;
@@ -21,6 +23,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.TreeNode;
 
 @Named("postController")
 @SessionScoped
@@ -31,6 +35,14 @@ public class PostController implements Serializable {
     private List<Post> items = null;
     private List<Post> stories = null;
     private List<Post> comments = null;
+    private List<Post> jobs = null;
+    private List<Post> questions = null;
+    private Post selected;
+    private Post parentComment;
+    private Post reply;
+    private Post comment;
+    private TreeNode treeNodeParent;
+    private TreeNode treeNode;
 
     private static final Histogram REQUEST_LATENCY_COMMENT = Histogram.build()
             .name("create_comment_latency")
@@ -42,13 +54,19 @@ public class PostController implements Serializable {
             .help("Request for creating a story latency in seconds.")
             .register();
 
-    private Post selected;
-
     public PostController() {
     }
 
     public Post getSelected() {
         return selected;
+    }
+
+    public Post getParentComment() {
+        return parentComment;
+    }
+
+    public void setParentComment(Post parentComment) {
+        this.parentComment = parentComment;
     }
 
     public void setSelected(Post selected) {
@@ -71,11 +89,42 @@ public class PostController implements Serializable {
         return selected;
     }
 
+    public Post prepareReplyCreate() {
+        reply = new Post();
+        initializeEmbeddableKey();
+        return reply;
+    }
+    
+    public Post prepareAddComment() {
+        comment = new Post();
+        initializeEmbeddableKey();
+        return comment;
+    }
+
     public void create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PostCreated"));
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
+    }
+
+    public void refreshParent() {
+        parentComment = null;
+        treeNodeParent = null;
+    }
+
+    public void addComment() {
+        comment.setParentId(selected);
+        comment.setContributorId((Contributor) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("loggedInContributor"));
+        comment.setCreatedDate(new Date());
+        comment.setPostType("comment");
+        if (null == selected.getPostList()) {
+            selected.setPostList(new ArrayList<Post>());
+            selected.getPostList().add(comment);
+        } else {
+            selected.getPostList().add(comment);
+        }
+        update();
     }
 
     public void createComment() {
@@ -85,6 +134,61 @@ public class PostController implements Serializable {
         selected.setContributorId((Contributor) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("loggedInContributor"));
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PostCreated"));
         requestTimer.observeDuration();
+    }
+
+    public void replyComment() {
+        System.out.println("------------------RAMT------------------------");
+        reply.setCreatedDate(new Date());
+        reply.setPostType("comment");
+        parentComment = (Post) treeNodeParent.getData();
+        reply.setParentId(parentComment);
+        reply.setContributorId((Contributor) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("loggedInContributor"));
+        attachReply(selected);
+        update();
+        parentComment = null;
+        treeNodeParent = null;
+    }
+
+    public void attachReply(Post parent) {
+        if (null != parent.getPostList()) {
+            for (Post post : parent.getPostList()) {
+                if (post.equals(parentComment)) {
+                    if (null == post.getPostList()) {
+                        post.setPostList(new ArrayList<Post>());
+                        post.getPostList().add(reply);
+                        break;
+                    } else {
+                        post.getPostList().add(reply);
+                        break;
+                    }
+                }
+                attachReply(post);
+            }
+        }
+    }
+
+    public TreeNode getTreeNode() {
+        if (selected != null) {
+            treeNode = new DefaultTreeNode(selected, null);
+            if (null != selected.getPostList()) {
+                for (Post post : selected.getPostList()) {
+                    TreeNode comments = new DefaultTreeNode(post, treeNode);
+                    createSubNode(post, comments);
+                }
+            }
+        }
+
+        return treeNode;
+    }
+
+    private void createSubNode(Post parrent, TreeNode node) {
+        List<Post> postList = parrent.getPostList();
+        if (null != postList) {
+            for (Post subPost : postList) {
+                TreeNode subNode = new DefaultTreeNode(subPost, node);
+                createSubNode(subPost, subNode);
+            }
+        }
     }
 
     public void createStory() {
@@ -182,6 +286,50 @@ public class PostController implements Serializable {
 
     public void setComments(List<Post> comments) {
         this.comments = comments;
+    }
+
+    public List<Post> getJobs() {
+        jobs = getFacade().findAllJobs();
+        return jobs;
+    }
+
+    public void setJobs(List<Post> jobs) {
+        this.jobs = jobs;
+    }
+
+    public List<Post> getQuestions() {
+        questions = getFacade().findAllQuestions();
+        return questions;
+    }
+
+    public void setQuestions(List<Post> questions) {
+        this.questions = questions;
+    }
+    
+    
+
+    public TreeNode getTreeNodeParent() {
+        return treeNodeParent;
+    }
+
+    public void setTreeNodeParent(TreeNode treeNodeParent) {
+        this.treeNodeParent = treeNodeParent;
+    }
+
+    public Post getReply() {
+        return reply;
+    }
+
+    public void setReply(Post reply) {
+        this.reply = reply;
+    }
+
+    public Post getComment() {
+        return comment;
+    }
+
+    public void setComment(Post comment) {
+        this.comment = comment;
     }
 
     @FacesConverter(forClass = Post.class)

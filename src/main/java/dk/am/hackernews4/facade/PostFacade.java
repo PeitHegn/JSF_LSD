@@ -42,6 +42,14 @@ public class PostFacade extends AbstractFacade<Post> {
     public List<Post> findAllComments() {
         return em.createNamedQuery("Post.findByPostType").setParameter("postType", "comment").getResultList();
     }
+    
+    public List<Post> findAllJobs() {
+        return em.createNamedQuery("Post.findByPostType").setParameter("postType", "job").getResultList();
+    }
+    
+    public List<Post> findAllQuestions() {
+        return em.createNamedQuery("Post.findByPostType").setParameter("postType", "question").getResultList();
+    }
 
     public List<RolfHelgePost> findAllRolfHelgePosts() {
 
