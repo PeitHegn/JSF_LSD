@@ -194,12 +194,6 @@ public class PostController implements Serializable {
     public void createStory() {
         Logger.getLogger(PostController.class.getName()).log(Level.INFO, null, "starting create story method");
         Histogram.Timer requestTimer = REQUEST_LATENCY_STORY.startTimer();
-        try {
-            Thread.sleep(15000);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(PostController.class.getName()).log(Level.SEVERE, null, "Failed to sleep for 15 seconds: " + ex);
-        }
-
         selected.setCreatedDate(new Date());
         selected.setContributorId((Contributor) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("loggedInContributor"));
         selected.setPostType("story");
