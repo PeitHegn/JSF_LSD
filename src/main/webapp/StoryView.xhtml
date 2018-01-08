@@ -27,6 +27,8 @@
                         <h:outputLink value="#{postController.selected.postUrl}">#{postController.selected.postUrl}</h:outputLink>
                         <h:outputText value="Score"/>
                         <h:outputText value="#{postController.selected.score}" title="#{bundle.ViewPostTitle_score}"/>
+                        <h:outputText value="Added by"/>
+                        <h:outputText value="#{postController.selected.contributorId.contributorName}" title="empty}"/>
                         <h:outputText value="Date added"/>
                         <h:outputText value="#{postController.selected.createdDate}" title="#{bundle.ViewPostTitle_createdDate}">
                             <f:convertDateTime pattern="MM/dd/yyyy" />

@@ -137,7 +137,6 @@ public class PostController implements Serializable {
     }
 
     public void replyComment() {
-        System.out.println("------------------RAMT------------------------");
         reply.setCreatedDate(new Date());
         reply.setPostType("comment");
         parentComment = (Post) treeNodeParent.getData();

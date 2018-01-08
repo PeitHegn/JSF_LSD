@@ -19,21 +19,15 @@
                              >
                     <p:column>
                         <f:facet name="header">
-                            <h:outputText value="Story Title"/>
+                            <h:outputText value="Job Title"/>
                         </f:facet>
                         <h:outputText value="#{item.parentId.postTitle}"/>
                     </p:column>
                     <p:column>
                         <f:facet name="header">
-                            <h:outputText value="Comment"/>
+                            <h:outputText value="URL"/>
                         </f:facet>
                         <h:outputText value="#{item.postText}"/>
-                    </p:column>
-                    <p:column>
-                        <f:facet name="header">
-                            <h:outputText value="#{bundle.ListPostTitle_score}"/>
-                        </f:facet>
-                        <h:outputText value="#{item.score}"/>
                     </p:column>
                     <p:column>
                         <f:facet name="header">
