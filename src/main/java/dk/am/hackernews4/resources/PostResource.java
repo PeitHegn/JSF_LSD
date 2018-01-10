@@ -12,6 +12,7 @@ import dk.am.hackernews4.model.Post;
 import dk.am.hackernews4.model.RolfHelgePost;
 import io.prometheus.client.CollectorRegistry;
 import io.prometheus.client.Counter;
+import io.prometheus.client.Histogram;
 import io.prometheus.client.exporter.common.TextFormat;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -56,6 +57,12 @@ public class PostResource {
             .name("post_total")
             .help("Number of times post has been served.").register();
 
+
+    private static final Histogram REQUEST_LATENCY_STORY = Histogram.build()
+            .name("create_story_latency_post")
+            .help("Request for creating a story latency in seconds.")
+            .register();
+
     @GET
     @Path("/status")
     @Produces(MediaType.TEXT_PLAIN)
@@ -79,7 +86,7 @@ public class PostResource {
     @Path("/post")
     @Consumes(MediaType.APPLICATION_JSON)
     public void digestPost(RolfHelgePost rolfHelgePost) {
-
+        Histogram.Timer requestTimer = REQUEST_LATENCY_STORY.startTimer();
         Contributor contributor = null;
         contributor = contributorFacade.findContributorForLogin(rolfHelgePost.getUsername(), rolfHelgePost.getPwd_hash());
 
@@ -105,6 +112,7 @@ public class PostResource {
         post.setPostUrl(rolfHelgePost.getPost_url());
 
         postFacade.create(post);
+        requestTimer.observeDuration();
         STATUS_POST.inc();
 
     }

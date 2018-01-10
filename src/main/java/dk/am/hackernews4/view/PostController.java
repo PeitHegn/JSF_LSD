@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.inject.Named;
@@ -45,7 +44,7 @@ public class PostController implements Serializable {
     private TreeNode treeNode;
 
     private static final Histogram REQUEST_LATENCY_COMMENT = Histogram.build()
-            .name("create_comment_latency")
+            .name("create_comment_latency") 
             .help("Request for creating a comment latency in seconds.")
             .register();
 
@@ -114,6 +113,7 @@ public class PostController implements Serializable {
     }
 
     public void addComment() {
+        Histogram.Timer requestTimer = REQUEST_LATENCY_COMMENT.startTimer();
         comment.setParentId(selected);
         comment.setContributorId((Contributor) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("loggedInContributor"));
         comment.setCreatedDate(new Date());
@@ -125,15 +125,16 @@ public class PostController implements Serializable {
             selected.getPostList().add(comment);
         }
         update();
+        requestTimer.observeDuration();
     }
 
     public void createComment() {
-        Histogram.Timer requestTimer = REQUEST_LATENCY_COMMENT.startTimer();
+        
         selected.setCreatedDate(new Date());
         selected.setPostType("comment");
         selected.setContributorId((Contributor) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("loggedInContributor"));
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("PostCreated"));
-        requestTimer.observeDuration();
+        
     }
 
     public void replyComment() {
